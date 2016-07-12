@@ -27,7 +27,13 @@ class DynamicProvider(forms.Form):
 
 def openid(request, op_name=None):
     client = None
-    request.session["next"] = request.GET["next"] if "next" in request.GET.keys() else "/"
+
+    if 'next' in request.GET:
+        next_url = request.GET['next']
+    else:
+        next_url = settings.LOGIN_REDIRECT_URL
+    request.session['next'] = next_url
+
     try:
         dyn = settings.OIDC_ALLOW_DYNAMIC_OP or False
     except:
